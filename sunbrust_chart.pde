@@ -14,33 +14,42 @@ String[][] game_names = {
   {"music"}, 
   {"table game", "boad game", "card game"}
 };
+StrInt[] categories;
 
 int sum_games;
-
+PieChart p;
 
 void setup() {
   size(500, 500);
-  for (String[] category : game_names) {
-    int cnt = category.length - 1;
+  categories = new StrInt[game_names.length];
+  for (int i = 0; i < game_names.length; i++) {
+    //for (String[] category : game_names) {
+    int cnt = game_names[i].length - 1;
     if (cnt == 0) {
       sum_games += 1;
     } else {
       sum_games += cnt;
     }
+    categories[i] = new StrInt(game_names[i][0], cnt == 0 ? 1 : cnt);
   }
   println(sum_games);
+  sortSI(categories, true);
+  printSI(categories);
   //rectMode(CENTER);
+  p = new PieChart(width/2, height/2, 200, categories);
   noLoop();
 }
 
 void draw() {
-  background(100, 100, 100);
+  background(255, 200, 200);
 
   stroke(0);
+
+  p.display();
   //strokeWeight(3);
   //circlePutting();
   //drawTreeVis();
-  tenBlock();
+  //tenBlock();
   //float radv = TWO_PI/sum_games;
   //float rad = -radv;
   //push();
@@ -120,9 +129,9 @@ void tenBlock() {
       //startEndRads[i][1] = startEndRads[i][0] + i+1;
     }
   }
-  for (float[] rads : startEndRads) {
-    println(rads);
-  }
+  //for (float[] rads : startEndRads) {
+  //  println(rads);
+  //}
 
   push();
   {
