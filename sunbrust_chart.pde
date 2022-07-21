@@ -35,7 +35,6 @@ void setup() {
 
 void draw() {
   background(255, 100, 100);
-  //ellipse(width/2, height/2, 100, 100);
 
   stroke(0);
   //strokeWeight(3);
