@@ -34,12 +34,13 @@ void setup() {
 }
 
 void draw() {
-  background(255, 100, 100);
+  background(100, 100, 100);
 
   stroke(0);
   //strokeWeight(3);
-  circlePutting();
+  //circlePutting();
   //drawTreeVis();
+  tenBlock();
   //float radv = TWO_PI/sum_games;
   //float rad = -radv;
   //push();
@@ -82,19 +83,65 @@ void drawTreeVis() {
 
 void circlePutting() {
   push();
-  float radv = TWO_PI/10;
-  //rectMode(CENTER);
-  translate(width/2, height/2);
-  rotate(radv/2);
-  for (float rad = -radv; rad < TWO_PI-radv; rad += radv) {
-    push();
-    {
-      rotate(rad);
+  {
+    float radv = TWO_PI/10;
+    //rectMode(CENTER);
+    translate(width/2, height/2);
+    rotate(radv/2);
+    int cnt = 1;
+    for (int i = 0; i < 10; ) {
+      for (int j = 0; j < cnt; j++) {
+        rotate(radv);
+      }
       fill(128, 255, 128);
+
+      stroke(0, 0, 255);
       rect(70+50/2, 0-50/2, 50, 50);
-      line(0,0,width,0);
+      line(0, 0, width, 0);
+      i+=cnt;
+      cnt++;
     }
-    pop();
+  }
+  pop();
+}
+
+
+void tenBlock() {
+  float radv = TWO_PI/10;
+  float[][] startEndRads = new float[4][2];
+  for (int i = 0; i < startEndRads.length; i++) {
+    if (i == 0) {
+      startEndRads[i][0] = 0;
+      startEndRads[i][1] = radv;
+      //startEndRads[i][1] = 1;
+    } else {
+      startEndRads[i][0] = startEndRads[i-1][1];
+      startEndRads[i][1] = startEndRads[i][0] + radv*(i+1);
+      //startEndRads[i][1] = startEndRads[i][0] + i+1;
+    }
+  }
+  for (float[] rads : startEndRads) {
+    println(rads);
+  }
+
+  push();
+  {
+    strokeWeight(3);
+    translate(width/2, height/2);
+    int cr = 100;
+    noFill();
+    ellipse(0, 0, cr*2, cr*2);
+    for (float[] rads : startEndRads) {
+      push();
+      rotate(rads[0]);
+      stroke(0, 255, 255);
+      line(0, 0, width, 0);
+      translate(cr, 0);
+      float innerRad =rads[1] - rads[0];
+      rotate(innerRad/2);
+      rect(0, 0, 50, cr*sin(innerRad)/sin((PI-innerRad)/2));
+      pop();
+    }
   }
   pop();
 }
