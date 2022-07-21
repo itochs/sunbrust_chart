@@ -15,20 +15,23 @@ String[][] game_names = {
   {"table game", "boad game", "card game"}
 };
 StrInt[] categories;
+String[][] sub_categories;
 
 int sum_games;
 PieChart p;
+DoubleLevelPieChart dp;
 
 void setup() {
   size(500, 500);
   categories = new StrInt[game_names.length];
+  sub_categories = new String[game_names.length][1];
   for (int i = 0; i < game_names.length; i++) {
     //for (String[] category : game_names) {
-    int cnt = game_names[i].length - 1;
-    if (cnt == 0) {
+    int cnt = game_names[i].length;
+    if (cnt == 1) {
       sum_games += 1;
     } else {
-      sum_games += cnt;
+      sum_games += cnt - 1;
     }
     categories[i] = new StrInt(game_names[i][0], cnt == 0 ? 1 : cnt);
   }
@@ -37,6 +40,7 @@ void setup() {
   printSI(categories);
   //rectMode(CENTER);
   p = new PieChart(width/2, height/2, 200, categories);
+  dp = new DoubleLevelPieChart(width/2, height/2, 200, categories, game_names);
   noLoop();
 }
 
@@ -45,7 +49,7 @@ void draw() {
 
   stroke(0);
 
-  p.display();
+  dp.display();
   //strokeWeight(3);
   //circlePutting();
   //drawTreeVis();
