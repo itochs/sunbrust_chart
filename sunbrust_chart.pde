@@ -38,21 +38,33 @@ void draw() {
 
   stroke(0);
   //strokeWeight(3);
-  float radv = TWO_PI/sum_games;
-  push();
-  rectMode(CENTER);
-  translate(width/2, height/2);
-  rotate(radv/2);
-  for (float rad = -radv; rad < TWO_PI-radv; rad += radv) {
-    push();
-    {
-      rotate(rad);
-      rect(200, 0, 50, 50);
-    }
-    pop();
-  }
-  pop();
+  circlePutting();
+  //drawTreeVis();
+  //float radv = TWO_PI/sum_games;
+  //float rad = -radv;
+  //push();
+  //{
+  //  //rectMode(CENTER);
+  //  translate(width/2, height/2);
+  //  rotate(radv/2);
+  //  for (int i = 0; i < game_names.length; i++) {
+  //    push();
+  //    {
+  //      rotate(rad);
+  //      int w = 50;
+  //      int h = 50*game_names[i].length;
+  //      rect(200+w/2, 0-h/2, w, h);
+  //    }
+  //    pop();
+  //    println(game_names[i].length == 1 ? 1 : game_names[i].length-1);
+  //    rad += radv*(game_names[i].length == 1 ? 1 : game_names[i].length-1);
+  //  }
+  //}
+  //pop();
+}
 
+void drawTreeVis() {
+  push();
   for (int i = 0; i < game_names.length; i++) {
     int x = i*width/game_names.length;
     int y = 0;
@@ -65,4 +77,24 @@ void draw() {
       rect(nx, y+h, nw, h);
     }
   }
+  pop();
+}
+
+void circlePutting() {
+  push();
+  float radv = TWO_PI/10;
+  //rectMode(CENTER);
+  translate(width/2, height/2);
+  rotate(radv/2);
+  for (float rad = -radv; rad < TWO_PI-radv; rad += radv) {
+    push();
+    {
+      rotate(rad);
+      fill(128, 255, 128);
+      rect(70+50/2, 0-50/2, 50, 50);
+      line(0,0,width,0);
+    }
+    pop();
+  }
+  pop();
 }
