@@ -33,7 +33,7 @@ void setup() {
     categories[i] = new StrInt(game_names[i][0], cnt == 0 ? 1 : cnt);
   }
   // 取得した要素数の表示
-  println(sum_games);
+  //println(sum_games);
   // カテゴリのソート
   /* 要らないかも */
   sortSI(categories, true);
@@ -42,7 +42,7 @@ void setup() {
   // double level pie chartの初期化
   // 中心座標(x, y)，直径，親子の距離，カテゴリ(後々要らないかも)，全データ
   dp = new DoubleLevelPieChart(width/2, height/2, 200, 100, categories, game_names);
-  noLoop();
+  //noLoop();
 }
 
 void draw() {
