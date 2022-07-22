@@ -50,3 +50,7 @@ void draw() {
   // double level pie chartの描画
   dp.display();
 }
+
+void mouseClicked(){
+  dp.onClick();
+}

@@ -9,6 +9,7 @@ class DoubleLevelPieChart {
   String[][] sub_data;
   // データサイズ
   int size;
+  int selected_parent_id = -1;
   /*
    *  データサイズ:
    *  子要素が0なら，要素数は1
@@ -37,6 +38,9 @@ class DoubleLevelPieChart {
     // マウス座標
     PVector mouse_pos = new PVector(mouseX, mouseY);
     for (int i = 0; i < main_data.length; i++) {
+      if (selected_parent_id >= 0 && i != selected_parent_id) {
+        continue;
+      }
       // 親が選択されているかどうか
       boolean parent_selected = isInFan(position, mouse_pos, r/2, rad, rad+radv*main_data[i].value);
       // 子要素の描画
@@ -65,6 +69,31 @@ class DoubleLevelPieChart {
       //角度の更新
       rad += radv*main_data[i].value;
     }
+  }
+
+  void onClick() {
+    // 要素数に対する角度の割合
+    float radv = TWO_PI/size;
+    // 初期角度
+    float rad = -PI/2;
+    // マウス座標
+    PVector mouse_pos = new PVector(mouseX, mouseY);
+    for (int i = 0; i < main_data.length; i++) {
+      // 親が選択されているかどうか
+      boolean parent_selected = isInFan(position, mouse_pos, r/2, rad, rad+radv*main_data[i].value);
+      //if (main_data[i].value != 1) {
+      //  float srad = rad;
+      //  for (int j = 0; j < main_data[i].value; j++) {
+      //    boolean child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
+      //  }
+      //}
+      if (parent_selected) {
+        selected_parent_id = i;
+        return;
+      }
+      rad += radv*main_data[i].value;
+    }
+    selected_parent_id = -1;
   }
 
   boolean isInFan(PVector center, PVector mouse_position, int fan_len, float start_rad, float end_rad) {
