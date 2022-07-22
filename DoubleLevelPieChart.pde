@@ -111,26 +111,37 @@ class DoubleLevelPieChart {
         rad += radv*main_data[i].value;
         continue;
       }
-      
+
       //println("----- m -----");
       float srad = rad;
       for (int j = 0; j < main_data[i].value; j++) {
         //if(i != 0 || j != 0) continue;
         push();
         rotate(srad);
-        if (PI/2 <= srad && srad <= TWO_PI - PI/2) {
-          scale(1, 1);
-        } else {
-          scale(1, 1);
-        }
 
         //fill(0);
         //rect(0, 0, 30, 80);
-        fill(0, 255, 0);
+
         ellipse(r/2, 0, 10, 10);
         //text("test" + i + ":" + j, r/2, 0);
 
-        text(sub_data[i][j+1], 10 + r/2, 0, (r+w)/2, 100);
+        fill(0);
+        boolean wrapBack = textWidth(sub_data[i][j+1]) > (r+w)/2;
+        if (wrapBack) {
+          String[] strs = sub_data[i][j+1].split(" ");
+          //println(strs);
+          int x = 10 + r/2;
+          for (int l = 0; l < strs.length; l++) {
+            fill(0);
+            rect(x, 0, textWidth(strs[l]), 24*(l%strs.length/2 + 1));
+            fill(0, 255, 0);
+            text(strs[l], x, 0);
+            x = (10 + r/2) * (l%strs.length/2 + 1);
+          }
+        }
+        //rect(10 + r/2, 0, textWidth(sub_data[i][j+1]), 24);
+        //fill(0, 255, 0);
+        //text(sub_data[i][j+1], 10 + r/2, 0, (r+w)/2, 100);
         //println(sub_data[i][j]);
         pop();
         srad += radv;
