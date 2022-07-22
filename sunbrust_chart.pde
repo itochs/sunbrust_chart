@@ -1,4 +1,4 @@
-
+// 全データ
 String[][] game_names = {
   {"shooting game", "FPS / TPS", "flight "}, 
   {"action game", "platform game", 
@@ -17,14 +17,13 @@ String[][] game_names = {
 StrInt[] categories;
 
 int sum_games;
-PieChart p;
 DoubleLevelPieChart dp;
 
 void setup() {
   size(500, 500);
+  // 先頭要素だけ取得，子要素の数に応じた値も取得
   categories = new StrInt[game_names.length];
   for (int i = 0; i < game_names.length; i++) {
-    //for (String[] category : game_names) {
     int cnt = game_names[i].length;
     if (cnt == 1) {
       sum_games += 1;
@@ -33,17 +32,21 @@ void setup() {
     }
     categories[i] = new StrInt(game_names[i][0], cnt == 0 ? 1 : cnt);
   }
+  // 取得した要素数の表示
   println(sum_games);
+  // カテゴリのソート
+  /* 要らないかも */
   sortSI(categories, true);
+  // カテゴリの表示
   printSI(categories);
-  //rectMode(CENTER);
-  p = new PieChart(width/2, height/2, 200, categories);
-  dp = new DoubleLevelPieChart(width/2, height/2, 200, categories, game_names);
+  // double level pie chartの初期化
+  // 中心座標(x, y)，直径，親子の距離，カテゴリ(後々要らないかも)，全データ
+  dp = new DoubleLevelPieChart(width/2, height/2, 200, 100, categories, game_names);
   noLoop();
 }
 
 void draw() {
   background(255, 200, 200);
-
+  // double level pie chart の描画
   dp.display();
 }

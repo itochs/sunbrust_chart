@@ -1,3 +1,5 @@
+
+// 文字列と数値を格納できる
 class StrInt {
   String name;
   int value;
@@ -6,11 +8,11 @@ class StrInt {
     value = num;
   }
 }
-
+// 出力
 void printSI(StrInt si) {
   println("name: " + si.name + ", value: " + si.value);
 }
-
+// 配列の出力
 void printSI(StrInt[] sis) {
   for (StrInt si : sis) {
     printSI(si);
