@@ -60,18 +60,29 @@ class DoubleLevelPieChart {
 
   boolean isInFan(PVector center, PVector mouse_position, int fan_len, float start_rad, float end_rad) {
     PVector fan_start_pos = new PVector(center.x + fan_len*cos(start_rad), center.y + fan_len*sin(start_rad));
-    line(fan_start_pos.x, fan_start_pos.y, center.x, center.y);
+    //line(fan_start_pos.x, fan_start_pos.y, center.x, center.y);
     ellipse(fan_start_pos.x, fan_start_pos.y, 10, 10);
     
     PVector fan_end_pos = new PVector(center.x + fan_len*cos(end_rad), center.y + fan_len*sin(end_rad));
-    line(fan_end_pos.x, fan_end_pos.y, center.x, center.y);
+    //line(fan_end_pos.x, fan_end_pos.y, center.x, center.y);
     ellipse(fan_end_pos.x, fan_end_pos.y, 10, 10);
     
-    PVector fan2pos = mouse_position.copy();
-    fan2pos.sub(center);
+    PVector fan2start = fan_start_pos.copy().sub(center);
+    PVector fan2end = fan_end_pos.copy().sub(center);
+    stroke(0, 0, 255);
+    strokeWeight(8);
+    line(center.x + fan2start.x, center.y + fan2start.y, center.x, center.y);
+    strokeWeight(5);
+    line(center.x + fan2end.x, center.y + fan2end.y, center.x, center.y);
+    
+    PVector fan_center = fan2start.copy().add(fan2end).normalize().mult(fan_len);
+    strokeWeight(3);
+    line(center.x + fan_center.x, center.y + fan_center.y, center.x, center.y);
+    
+    PVector fan2mouse = mouse_position.copy().sub(center);
     stroke(0, 255, 0);
-    line(center.x + fan2pos.x, center.y + fan2pos.y, center.x, center.y);
-    ellipse(center.x + fan2pos.x, center.y + fan2pos.y, 10, 10);
+    line(center.x + fan2mouse.x, center.y + fan2mouse.y, center.x, center.y);
+    ellipse(center.x + fan2mouse.x, center.y + fan2mouse.y, 10, 10);
     return false;
   }
 }
