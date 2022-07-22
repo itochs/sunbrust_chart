@@ -48,6 +48,6 @@ void draw() {
   dp.display();
 }
 
-void mouseClicked(){
+void mouseClicked() {
   dp.onClick();
 }

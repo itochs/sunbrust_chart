@@ -145,16 +145,38 @@ class DoubleLevelPieChart {
         continue;
       }
 
+
       //親要素の描画
       push();
+      /* scaleが0未満の時のものを消せば，以前の通りになる */
+      int scale = 1;
+      if (PI/2 <= rad && rad <= TWO_PI - PI/2) {
+        scale(-1, -1);
+        scale = -1;
+      } else {
+        scale(1, 1);
+        scale = 1;
+      }
       noStroke();
 
       //回転させて適切な位置に？
-      rotate(rad + radv*main_data[i].value/2);
+      if (i != selected_parent_id)
+        rotate(rad + radv*main_data[i].value/2);
+
       fill(0);
-      text(sub_data[i][0], 20, -12);
+      if (scale < 0) {
+        text(sub_data[i][0], -r/2 + 10, -12);
+      } else {
+        if (i == selected_parent_id) {
+          text(sub_data[i][0], -textWidth(sub_data[i][0])/2, -12);
+        } else {
+          text(sub_data[i][0], 30, -12);
+        }
+      }
       //ellipse(10, 0, 10, 10);
       pop();
+
+
 
       //子がない場合
       if (main_data[i].value == 1) {
@@ -165,7 +187,18 @@ class DoubleLevelPieChart {
       //子の描画
       float srad = rad;
       for (int j = 0; j < main_data[i].value; j++) {
+        //if (true) {
+        //  break;
+        //}
         push();
+        scale = 1;
+        if (PI/2 <= srad && srad <= TWO_PI - PI/2) {
+          scale(-1, -1);
+          scale = -1;
+        } else {
+          scale(1, 1);
+          scale = 1;
+        }
         boolean wrapBack = textWidth(sub_data[i][j+1]) > (r+w)/2;
 
         //はみ出す場合
@@ -173,34 +206,45 @@ class DoubleLevelPieChart {
 
           //扇の端に移動
           rotate(srad);
-
+          translate(10 + r/2, 0);
           //テキストの分割
           String[] strs = sub_data[i][j+1].split(" ");
 
           //それぞれのテキストの描画
           for (int l = 0; l < strs.length; l++) {
-            float x = 10 + r/2;
+            //float x = 10 + r/2;
             //println(strs[l]);
             fill(0);
-            text(strs[l], x, 24*l);
+
+            //text(strs[l], textWidth(strs[l])*scale, 24*l);
+            if (scale < 0) {
+              text(strs[l], -(r+w)/2 - textWidth(strs[l]) - 50, 24*l - 24*strs.length);
+            } else {
+              text(strs[l], 0, 24*l);
+            }
           }
-          
-        } else {  //はみ出さい場合
-          
+        } else {  //はみ出さない場合
+
           //扇の中心に移動
           rotate(srad + radv/2);
-          
+          translate(10 + r/2, 0);
+
           //テキストの描画
           fill(0);
-          text(sub_data[i][j+1], 10 + r/2, 0);
+          if (scale < 0) {
+            text(sub_data[i][j+1], -(r+w)/2 - textWidth(sub_data[i][j+1]) - 30, 0);
+          } else {
+            text(sub_data[i][j+1], 0, 0);
+          }
+          //text(sub_data[i][j+1], textWidth(sub_data[i][j+1])*scale*2, 0);
           //println(sub_data[i][j]);
         }
         pop();
-        
+
         //角度の更新
         srad += radv;
       }
-      
+
       //角度の更新，変数に入れた方が絶対にいい
       rad += radv*main_data[i].value;
     }
@@ -220,7 +264,7 @@ class DoubleLevelPieChart {
       if (selected_parent_id >= 0 && i != selected_parent_id) {
         continue;
       }
-      
+
       // 親が選択されているかどうか
       boolean parent_selected = isInFan(position, mouse_pos, r/2, rad, rad+radv*main_data[i].value);
       //println(i + ": " + parent_selected);
@@ -228,27 +272,27 @@ class DoubleLevelPieChart {
         float srad = rad;
         for (int j = 0; j < main_data[i].value; j++) {
           //println(degrees(srad) + " & " + degrees(srad+radv));
-          
+
           //子が選択されているかどうか
           boolean child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
           //println("\t" + j + ": " + child_selected);
-          
+
           //子が選択されているなら何もしない
           if (!parent_selected && child_selected) {
             return;
           }
-      
+
           //更新
           srad += radv;
         }
       }
-      
+
       //親が選択されて，選択されたものがない場合
       if (parent_selected && selected_parent_id < 0) {
-        
+
         //選択されたものを格納
         selected_parent_id = i;
-        
+
         //選択されたもののデータ数
         size = main_data[i].value;
         return;
@@ -257,7 +301,7 @@ class DoubleLevelPieChart {
       //更新
       rad += radv*main_data[i].value;
     }
-    
+
     //チャート外をクリックした，もしくは親要素をクリックした場合
     //初期設定に戻す
     selected_parent_id = -1;
