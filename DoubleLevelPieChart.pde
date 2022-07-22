@@ -43,12 +43,14 @@ class DoubleLevelPieChart {
       if (selected_parent_id >= 0 && i != selected_parent_id) {
         continue;
       }
+      //println(degrees(rad));
       // 親が選択されているかどうか
       boolean parent_selected = isInFan(position, mouse_pos, r/2, rad, rad+radv*main_data[i].value);
       // 子要素の描画
       if (main_data[i].value != 1) {
         float srad = rad;
         for (int j = 0; j < main_data[i].value; j++) {
+          //println("\t" + degrees(srad) + " & " + degrees(srad+radv));
           boolean child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
           color sc = color(200, int(map(j, 0, main_data[i].value, 0, 255)), 200);
           if (!parent_selected && child_selected) {
@@ -71,31 +73,50 @@ class DoubleLevelPieChart {
       //角度の更新
       rad += radv*main_data[i].value;
     }
+    
+    stroke(0, 255, 0);
+    line(mouse_pos.x, mouse_pos.y, position.x, position.y);
   }
 
   void onClick() {
     // 要素数に対する角度の割合
     float radv = TWO_PI/size;
+    println("size: " + size);
+    println("deglee: " + degrees(radv));
     // 初期角度
     float rad = -PI/2;
     // マウス座標
     PVector mouse_pos = new PVector(mouseX, mouseY);
+    boolean parent_selected = false;
+    boolean child_selected = false;
     for (int i = 0; i < main_data.length; i++) {
+      if (selected_parent_id >= 0 && i != selected_parent_id) {
+        continue;
+      }
       // 親が選択されているかどうか
-      boolean parent_selected = isInFan(position, mouse_pos, r/2, rad, rad+radv*main_data[i].value);
-      //if (main_data[i].value != 1) {
-      //  float srad = rad;
-      //  for (int j = 0; j < main_data[i].value; j++) {
-      //    boolean child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
-      //  }
-      //}
-      if (parent_selected) {
+      parent_selected = isInFan(position, mouse_pos, r/2, rad, rad+radv*main_data[i].value);
+      println(i + ": " + parent_selected);
+      if (main_data[i].value != 1) {
+        float srad = rad;
+        for (int j = 0; j < main_data[i].value; j++) {
+          child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
+          println("\t" + j + ": " + child_selected);
+          if (child_selected) {
+            return;
+          }
+        }
+      }
+      if (parent_selected && selected_parent_id < 0) {
         selected_parent_id = i;
+        size = main_data[i].value;
         return;
       }
+
       rad += radv*main_data[i].value;
     }
-    selected_parent_id = -1;
+    //selected_parent_id = -1;
+    //size = INIT_SIZE;
+    
   }
 
   boolean isInFan(PVector center, PVector mouse_position, int fan_len, float start_rad, float end_rad) {
