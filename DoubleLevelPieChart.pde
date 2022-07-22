@@ -28,8 +28,8 @@ class DoubleLevelPieChart {
   }
 
   void display() {
-    boolean tf = isInFan(position, new PVector(mouseX, mouseY), 100, -PI/2, 0);
-    println(tf);
+    //boolean tf = isInFan(position, new PVector(mouseX, mouseY), 100, -PI/2, 0);
+    //println(tf);
     // 要素数に対する角度の割合
     float radv = TWO_PI/size;
     // 初期角度
@@ -43,9 +43,14 @@ class DoubleLevelPieChart {
       if (main_data[i].value != 1) {
         float srad = rad;
         for (int j = 0; j < main_data[i].value; j++) {
+          boolean child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
           color sc = color(200, int(map(j, 0, main_data[i].value, 0, 255)), 200);
+          if (!parent_selected && child_selected) {
+            parent_selected = true;
+            sc = color(0, 0, 255);
+          }
           fill(sc);
-          arc(position.x, position.y, r+w, r+w, srad, srad+radv*(j+1));
+          arc(position.x, position.y, r+w, r+w, srad, srad+radv);
           srad += radv;
         }
         //printSI(main_data[i]);
