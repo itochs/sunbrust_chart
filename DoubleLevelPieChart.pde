@@ -56,11 +56,12 @@ class DoubleLevelPieChart {
         for (int j = 0; j < main_data[i].value; j++) {
           //println("\t" + degrees(srad) + " & " + degrees(srad+radv));
           boolean child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
-          color sc = color(200, int(map(j, 0, main_data[i].value, 0, 255)), 200);
+          color sc = color(200, int(map(j, 0, main_data[i].value, 0, 255)), 200, 128);
           if (!parent_selected && child_selected) {
             parent_selected = true;
-            sc = color(0, 0, 255);
+            sc = color(0, 0, 255, 128);
           }
+          //colorMode(RGB, 255);
           fill(sc);
           arc(position.x, position.y, r+w, r+w, srad, srad+radv);
           srad += radv;
@@ -68,12 +69,15 @@ class DoubleLevelPieChart {
         //printSI(main_data[i]);
       }
       // 親要素の描画
-      color mc = color(int(map(i, 0, main_data.length, 0, 255)));
+      push();
+      colorMode(HSB, 255);
+      color mc = color(int(map(i, 0, main_data.length, 0, 255)), 128, 255);
       if (parent_selected) {
-        mc = color(0, 128, 255);
+        mc = color(0, 0, 255);
       }
       fill(mc);
       arc(position.x, position.y, r, r, rad, rad+radv*main_data[i].value);
+      pop();
       //角度の更新
       rad += radv*main_data[i].value;
     }
@@ -88,23 +92,20 @@ class DoubleLevelPieChart {
     textSize(24);
     textAlign(LEFT, TOP);
     translate(position.x, position.y);
-    //rectMode(CENTER);
     // 要素数に対する角度の割合
     float radv = TWO_PI/size;
     // 初期角度
     float rad = -PI/2;
-    //println("***** start *****");
     for (int i = 0; i < main_data.length; i++) {
 
       if (selected_parent_id >= 0 && i != selected_parent_id) {
         continue;
       }
       push();
+      noStroke();
       rotate(rad + radv*main_data[i].value/2);
-      fill(255);
-      rect(20, 0, textWidth(sub_data[i][0]), 24);
       fill(0);
-      text(sub_data[i][0], 20, 0);
+      text(sub_data[i][0], 20, -12);
       ellipse(10, 0, 10, 10);
       pop();
       if (main_data[i].value == 1) {
@@ -112,44 +113,31 @@ class DoubleLevelPieChart {
         continue;
       }
 
-      //println("----- m -----");
       float srad = rad;
       for (int j = 0; j < main_data[i].value; j++) {
-        //if(i != 0 || j != 0) continue;
         push();
-        rotate(srad);
-
-        //fill(0);
-        //rect(0, 0, 30, 80);
-
-        ellipse(r/2, 0, 10, 10);
-        //text("test" + i + ":" + j, r/2, 0);
-
-        fill(0);
         boolean wrapBack = textWidth(sub_data[i][j+1]) > (r+w)/2;
         if (wrapBack) {
+          rotate(srad);
           String[] strs = sub_data[i][j+1].split(" ");
-          //println(strs);
-          int x = 10 + r/2;
+
           for (int l = 0; l < strs.length; l++) {
+            float x = 10 + r/2;
+            //println(strs[l]);
             fill(0);
-            rect(x, 0, textWidth(strs[l]), 24*(l%strs.length/2 + 1));
-            fill(0, 255, 0);
-            text(strs[l], x, 0);
-            x = (10 + r/2) * (l%strs.length/2 + 1);
+            text(strs[l], x, 24*l);
           }
+        } else {
+          rotate(srad + radv/2);
+          fill(0);
+          text(sub_data[i][j+1], 10 + r/2, 0);
+          //println(sub_data[i][j]);
         }
-        //rect(10 + r/2, 0, textWidth(sub_data[i][j+1]), 24);
-        //fill(0, 255, 0);
-        //text(sub_data[i][j+1], 10 + r/2, 0, (r+w)/2, 100);
-        //println(sub_data[i][j]);
         pop();
         srad += radv;
       }
-      //println("----- e m -----");
       rad += radv*main_data[i].value;
     }
-    //println("***** end *****");
     pop();
   }
 
