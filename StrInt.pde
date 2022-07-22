@@ -18,7 +18,7 @@ void printSI(StrInt[] sis) {
     printSI(si);
   }
 }
-
+// bubble sort
 void sortSI(StrInt[] sis, boolean reverse) {
   for (int i = 0; i < sis.length; i++) {
     int id = i;
@@ -29,8 +29,8 @@ void sortSI(StrInt[] sis, boolean reverse) {
         if (sis[id].value > sis[j].value) id = j;
       }
     }
-    StrInt buff = sis[i];
+    StrInt buffer = sis[i];
     sis[i] = sis[id];
-    sis[id] = buff;
+    sis[id] = buffer;
   }
 }

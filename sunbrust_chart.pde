@@ -47,6 +47,6 @@ void setup() {
 
 void draw() {
   background(255, 200, 200);
-  // double level pie chart の描画
+  // double level pie chartの描画
   dp.display();
 }
