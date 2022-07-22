@@ -79,6 +79,30 @@ class DoubleLevelPieChart {
 
     stroke(0, 255, 0);
     line(mouse_pos.x, mouse_pos.y, position.x, position.y);
+    displayText();
+  }
+
+  void displayText() {
+    push();
+    textSize(24);
+    fill(255, 0, 0);
+    println("***** start *****");
+    for (int i = 0; i < main_data.length; i++) {
+
+      if (selected_parent_id >= 0 && i != selected_parent_id) {
+        continue;
+      }
+      //if (main_data[i].value == 1) {
+      //  continue;
+      //}
+      println("----- m -----");
+      for (int j = 0; j < main_data[i].value; j++) {
+        println(sub_data[i][j]);
+      }
+      println("----- e m -----");
+    }
+    println("***** end *****");
+    pop();
   }
 
   void onClick() {

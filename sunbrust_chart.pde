@@ -36,7 +36,7 @@ void setup() {
   println(sum_games);
   // カテゴリのソート
   /* 要らないかも */
-  sortSI(categories, true);
+  //sortSI(categories, true);
   // カテゴリの表示
   printSI(categories);
   // double level pie chartの初期化
