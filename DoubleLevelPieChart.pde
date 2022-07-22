@@ -8,6 +8,7 @@ class DoubleLevelPieChart {
   // 子データ
   String[][] sub_data;
   // データサイズ
+  int INIT_SIZE;
   int size;
   int selected_parent_id = -1;
   /*
@@ -26,6 +27,7 @@ class DoubleLevelPieChart {
     for (StrInt si : main) {
       size += si.value;
     }
+    INIT_SIZE = size;
   }
 
   void display() {
