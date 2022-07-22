@@ -31,8 +31,11 @@ class DoubleLevelPieChart {
   }
 
   void display() {
-    //boolean tf = isInFan(position, new PVector(mouseX, mouseY), 100, -PI/2, 0);
-    //println(tf);
+    //boolean tf = isInFan(position, new PVector(mouseX, mouseY), 100, -PI/2, PI/2);
+    ////println(tf);
+    //if(tf){
+    //  return;
+    //}
     // 要素数に対する角度の割合
     float radv = TWO_PI/size;
     // 初期角度
@@ -114,8 +117,8 @@ class DoubleLevelPieChart {
 
       rad += radv*main_data[i].value;
     }
-    //selected_parent_id = -1;
-    //size = INIT_SIZE;
+    selected_parent_id = -1;
+    size = INIT_SIZE;
     
   }
 
@@ -147,9 +150,11 @@ class DoubleLevelPieChart {
     //line(center.x + fan2end.x, center.y + fan2end.y, center.x, center.y);
 
     //扇を二分割するベクトル
-    PVector fan_center = fan2start.copy().add(fan2end).normalize().mult(fan_len);
+    float half_rad = (end_rad - start_rad)/2;
+    //PVector fan_center = fan2start.copy().add(fan2end).normalize().mult(fan_len);
+    PVector fan_c = new PVector(cos(start_rad + half_rad), sin(start_rad + half_rad));
     //strokeWeight(3);
-    //line(center.x + fan_center.x, center.y + fan_center.y, center.x, center.y);
+    //line(center.x + fan_c.x, center.y + fan_c.y, center.x, center.y);
 
     //扇の中心からマウス座標のベクトル
     PVector fan2mouse = mouse_position.copy().sub(center);
@@ -158,9 +163,12 @@ class DoubleLevelPieChart {
     //ellipse(center.x + fan2mouse.x, center.y + fan2mouse.y, 10, 10);
 
     //扇を二分割するベクトルと扇の中心からマウス座標のベクトルのなす角
-    float theta = PVector.angleBetween(fan2mouse, fan_center);
+    println(fan2mouse);
+    println(fan_c);
+    float theta = PVector.angleBetween(fan2mouse, fan_c);
+    println(theta);
     //thetaが扇の角度の半分より大きいなら扇の外
-    if (theta >= (end_rad - start_rad)/2) {
+    if (theta >= half_rad) {
       return false;
     }
 
