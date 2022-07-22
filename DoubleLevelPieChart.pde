@@ -76,7 +76,7 @@ class DoubleLevelPieChart {
       //角度の更新
       rad += radv*main_data[i].value;
     }
-    
+
     stroke(0, 255, 0);
     line(mouse_pos.x, mouse_pos.y, position.x, position.y);
   }
@@ -90,23 +90,23 @@ class DoubleLevelPieChart {
     float rad = -PI/2;
     // マウス座標
     PVector mouse_pos = new PVector(mouseX, mouseY);
-    boolean parent_selected = false;
-    boolean child_selected = false;
     for (int i = 0; i < main_data.length; i++) {
       if (selected_parent_id >= 0 && i != selected_parent_id) {
         continue;
       }
       // 親が選択されているかどうか
-      parent_selected = isInFan(position, mouse_pos, r/2, rad, rad+radv*main_data[i].value);
+      boolean parent_selected = isInFan(position, mouse_pos, r/2, rad, rad+radv*main_data[i].value);
       println(i + ": " + parent_selected);
       if (main_data[i].value != 1) {
         float srad = rad;
         for (int j = 0; j < main_data[i].value; j++) {
-          child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
+          println(degrees(srad) + " & " + degrees(srad+radv));
+          boolean child_selected = isInFan(position, mouse_pos, (r+w)/2, srad, srad+radv);
           println("\t" + j + ": " + child_selected);
-          if (child_selected) {
+          if (!parent_selected && child_selected) {
             return;
           }
+          srad += radv;
         }
       }
       if (parent_selected && selected_parent_id < 0) {
@@ -119,7 +119,6 @@ class DoubleLevelPieChart {
     }
     selected_parent_id = -1;
     size = INIT_SIZE;
-    
   }
 
   boolean isInFan(PVector center, PVector mouse_position, int fan_len, float start_rad, float end_rad) {
@@ -163,10 +162,10 @@ class DoubleLevelPieChart {
     //ellipse(center.x + fan2mouse.x, center.y + fan2mouse.y, 10, 10);
 
     //扇を二分割するベクトルと扇の中心からマウス座標のベクトルのなす角
-    println(fan2mouse);
-    println(fan_c);
+    //println(fan2mouse);
+    //println(fan_c);
     float theta = PVector.angleBetween(fan2mouse, fan_c);
-    println(theta);
+    //println(theta);
     //thetaが扇の角度の半分より大きいなら扇の外
     if (theta >= half_rad) {
       return false;
