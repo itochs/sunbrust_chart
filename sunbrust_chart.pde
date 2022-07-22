@@ -20,7 +20,7 @@ int sum_games;
 DoubleLevelPieChart dp;
 
 void setup() {
-  size(500, 500);
+  size(800, 800);
   // 先頭要素だけ取得，子要素の数に応じた値も取得
   categories = new StrInt[game_names.length];
   for (int i = 0; i < game_names.length; i++) {
@@ -30,7 +30,7 @@ void setup() {
     } else {
       sum_games += cnt - 1;
     }
-    categories[i] = new StrInt(game_names[i][0], cnt == 0 ? 1 : cnt);
+    categories[i] = new StrInt(game_names[i][0], cnt == 1 ? 1 : cnt-1);
   }
   // 取得した要素数の表示
   println(sum_games);
@@ -41,7 +41,7 @@ void setup() {
   printSI(categories);
   // double level pie chartの初期化
   // 中心座標(x, y)，直径，親子の距離，カテゴリ(後々要らないかも)，全データ
-  dp = new DoubleLevelPieChart(width/2, height/2, 200, 150, categories, game_names);
+  dp = new DoubleLevelPieChart(width/2, height/2, 400, 400, categories, game_names);
   //noLoop();
 }
 

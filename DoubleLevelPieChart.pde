@@ -28,6 +28,7 @@ class DoubleLevelPieChart {
       size += si.value;
     }
     INIT_SIZE = size;
+    println("init: " + INIT_SIZE);
   }
 
   void display() {
@@ -85,23 +86,59 @@ class DoubleLevelPieChart {
   void displayText() {
     push();
     textSize(24);
-    fill(255, 0, 0);
-    println("***** start *****");
+    textAlign(LEFT, TOP);
+    translate(position.x, position.y);
+    //rectMode(CENTER);
+    // 要素数に対する角度の割合
+    float radv = TWO_PI/size;
+    // 初期角度
+    float rad = -PI/2;
+    //println("***** start *****");
     for (int i = 0; i < main_data.length; i++) {
 
       if (selected_parent_id >= 0 && i != selected_parent_id) {
         continue;
       }
-      //if (main_data[i].value == 1) {
-      //  continue;
-      //}
-      println("----- m -----");
-      for (int j = 0; j < main_data[i].value; j++) {
-        println(sub_data[i][j]);
+      push();
+      rotate(rad + radv*main_data[i].value/2);
+      fill(255);
+      rect(20, 0, textWidth(sub_data[i][0]), 24);
+      fill(0);
+      text(sub_data[i][0], 20, 0);
+      ellipse(10, 0, 10, 10);
+      pop();
+      if (main_data[i].value == 1) {
+        rad += radv*main_data[i].value;
+        continue;
       }
-      println("----- e m -----");
+      
+      //println("----- m -----");
+      float srad = rad;
+      for (int j = 0; j < main_data[i].value; j++) {
+        //if(i != 0 || j != 0) continue;
+        push();
+        rotate(srad);
+        if (PI/2 <= srad && srad <= TWO_PI - PI/2) {
+          scale(1, 1);
+        } else {
+          scale(1, 1);
+        }
+
+        //fill(0);
+        //rect(0, 0, 30, 80);
+        fill(0, 255, 0);
+        ellipse(r/2, 0, 10, 10);
+        //text("test" + i + ":" + j, r/2, 0);
+
+        text(sub_data[i][j+1], 10 + r/2, 0, (r+w)/2, 100);
+        //println(sub_data[i][j]);
+        pop();
+        srad += radv;
+      }
+      //println("----- e m -----");
+      rad += radv*main_data[i].value;
     }
-    println("***** end *****");
+    //println("***** end *****");
     pop();
   }
 
